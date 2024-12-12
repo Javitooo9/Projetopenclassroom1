@@ -1,0 +1,16 @@
+.medalsChart {
+  display: flex;
+  justify-content: center; /* Centrer le graphique horizontalement */
+  align-items: center; /* Centrer verticalement si nécessaire */
+  margin: 20px auto; /* Espacement autour du graphique */
+  width: 400px; /* Largeur maximale du conteneur */
+  height: 400px; /* Hauteur maximale */
+
+  canvas {
+    width: 100% !important; /* Adapter le canvas à la taille du conteneur */
+    height: 100% !important;
+  }
+}
+
+  
+  
