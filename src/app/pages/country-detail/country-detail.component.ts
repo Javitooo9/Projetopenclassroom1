@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Olympic } from 'src/app/core/models/Olympic';
+import { Subscription } from 'rxjs';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -9,11 +10,13 @@ import Chart from 'chart.js/auto';
   templateUrl: './country-detail.component.html',
   styleUrls: ['./country-detail.component.scss'],
 })
-export class CountryDetailComponent implements OnInit {
+export class CountryDetailComponent implements OnInit, OnDestroy {
   country!: Olympic;
   totalMedals: number = 0;
   totalAthletes: number = 0;
   totalParticipations: number = 0;
+  private subscription!: Subscription;
+  private chart!: Chart;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,7 +26,7 @@ export class CountryDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const countryId = Number(this.route.snapshot.paramMap.get('id'));
-    this.olympicService.getOlympicById(countryId).subscribe((data) => {
+    this.subscription = this.olympicService.getOlympicById(countryId).subscribe((data) => {
       if (data) {
         this.country = data;
         this.totalMedals = this.calculateTotalMedals(data);
@@ -34,6 +37,15 @@ export class CountryDetailComponent implements OnInit {
         console.error(`Country with ID ${countryId} not found.`);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 
   private calculateTotalMedals(country: Olympic): number {
@@ -51,7 +63,7 @@ export class CountryDetailComponent implements OnInit {
       return;
     }
 
-    new Chart(ctx, {
+    this.chart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: this.country.participations.map((p) => p.year.toString()),

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'; 
+import { Observable, of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Olympic } from 'src/app/core/models/Olympic';
@@ -10,19 +10,37 @@ import Chart from 'chart.js/auto';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   public olympics$: Observable<any> = of(null);
   countries: Olympic[] = [];
+  totalParticipations: number = 0;
+  totalCountries: number = 0;
+  private subscription: Subscription = new Subscription();
+  private chart: Chart | null = null;
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.olympicService.getOlympics().subscribe((data) => {
+    const sub = this.olympicService.getOlympics().subscribe((data) => {
       if (data) {
         this.countries = data;
+        this.totalCountries = data.length;
+        this.totalParticipations = data.reduce((sum, country) => 
+          sum + (country.participations ? country.participations.length : 0), 0
+        );
         this.createChart();
       }
     });
+    this.subscription.add(sub);
+    window.addEventListener('resize', this.resizeChart.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    window.removeEventListener('resize', this.resizeChart.bind(this));
   }
 
   createChart() {
@@ -32,7 +50,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    new Chart(ctx, {
+    this.chart = new Chart(ctx, {
       type: 'pie',
       data: {
         labels: this.countries.map((country) => country.country),
@@ -52,15 +70,22 @@ export class HomeComponent implements OnInit {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         onClick: (event, elements) => {
           if (elements.length > 0) {
-            const index = elements[0].index; // Get index of clicked slice
-            const countryId = this.countries[index].id; // Get country ID
-            this.navigateToCountryDetail(countryId); // Navigate with ID
+            const index = elements[0].index;
+            const countryId = this.countries[index].id;
+            this.navigateToCountryDetail(countryId);
           }
         },
       },
     });
+  }
+
+  resizeChart() {
+    if (this.chart) {
+      this.chart.resize();
+    }
   }
 
   navigateToCountryDetail(id: number): void {

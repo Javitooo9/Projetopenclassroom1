@@ -8,10 +8,11 @@
       margin: 20px 0;
   
       .stat-box {
-        border: 1px solid #ccc;
+        border: 1px solid #0A7C86;
+        border-width:0.08cm;
         padding: 10px 20px;
         border-radius: 8px;
-        background: #f9f9f9;
+        background: white;
   
         h3 {
           margin: 0;
@@ -48,9 +49,14 @@
 
   h1 {
     display: flex;
-    justify-content: center; 
-    margin-bottom: 1cm;
-    margin-top: 1cm;
+    justify-content: center;
+    align-items: center;
+    background-color: #0A7C86; /* Couleur de fond du titre */
+    color: white; /* Couleur du texte */
+    padding: 10px;
+    border-radius: 10px; /* Bords arrondis */
+    font-size: 1.8em;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
   }
-
   

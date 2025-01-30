@@ -27,3 +27,63 @@ Once mastered, you should continue by creating the typescript interfaces inside 
 You're now ready to implement the requested features.
 
 Good luck!
+
+
+Typescipt 5.4.2
+Nodejs v22.11.0
+npm 10.9.0
+Angular v18
+Rxjs
+Chartjs
+
+Lancer le programme :
+
+Il es important d'avoir les outils suivants installés sur votre système :
+
+Node.js (version 14 ou ultérieure) :
+
+Angular CLI (Command Line Interface) :
+
+On peut l'installer globalement avec la commande suivante :
+
+npm install -g @angular/cli
+
+Il faut également avoir téléchargé Git :
+
+
+Installation
+
+1. Clonez le dépôt
+
+Exécutez la commande suivante pour cloner le projet sur votre machine locale :
+
+git clone [URL_DU_DEPOT]
+
+Remplacez [URL_DU_DEPOT] par l’URL du dépôt Git.
+
+2. Accédez au répertoire du projet
+
+Naviguez dans le répertoire du projet cloné :
+
+cd [nom_du_repertoire]
+
+3. Installez les dépendances
+
+Exécutez la commande suivante pour installer toutes les dépendances nécessaires :
+
+npm install
+
+Démarrer l’Application
+
+1. Lancer le serveur de développement
+
+Utilisez la commande suivante pour démarrer l’application en mode développement :
+
+ng serve
+
+Par défaut, l'application sera disponible sur :
+http://localhost:4200
+
+2. Accédez à l’application
+
+Ouvrez un navigateur et accédez à l’URL suivante :
